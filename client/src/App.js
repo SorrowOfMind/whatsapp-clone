@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Login from './components/Login';
 
 function App() {
+  const [id, setId] = useState(null);
   return (
     <div className="App">
-      <Login />
+      <Login setId={setId}/>
     </div>
   );
 }
