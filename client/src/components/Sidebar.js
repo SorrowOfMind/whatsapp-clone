@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Tab, Nav} from 'react-bootstrap';
+import {Tab, Nav, Button} from 'react-bootstrap';
 import Conversations from './Conversations';
 import Contacts from './Contacts';
 
@@ -8,6 +8,7 @@ const contactsKey = 'contacts';
 
 const Sidebar = ({id}) => {
     const [activeKey, setActiveKey] = useState(conversationsKey);
+    const convIsOpen = activeKey === conversationsKey ? true : false;
     return (
         <div
             style={{
@@ -34,8 +35,9 @@ const Sidebar = ({id}) => {
                     </Tab.Pane>
                 </Tab.Content>
                 <div className="p-2 border-top border-right small">
-                    Your Id: <spna className="text-muted">{id}</spna>
+                    Your Id: <span className="text-muted">{id}</span>
                 </div>
+                <Button variant="success" className="rounded-0">Create new {convIsOpen ? 'Conversation' : 'Contact'}</Button>
             </Tab.Container>
         </div>
     )
