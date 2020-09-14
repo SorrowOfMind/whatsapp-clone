@@ -8,14 +8,14 @@ export const useContacts = () => {
 }
 
 export const ContactProvider = (props) => {
-    const [contact, setContact] = useLS('contacts', []);
+    const [contacts, setContact] = useLS('contacts', []);
 
     const createContact = (id, name) => {
         setContact(prevContacts => [...prevContacts, {id, name}])
     }
 
     return (
-        <ContactContext.Provider value={{contact, createContact}}>
+        <ContactContext.Provider value={{contacts, createContact}}>
             {props.children}
         </ContactContext.Provider>
     )
