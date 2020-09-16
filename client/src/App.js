@@ -3,6 +3,7 @@ import Login from './components/Login';
 import useLS from './hooks/useLS';
 import Dashboard from './components/Dashboard';
 import {ContactProvider} from './contexts/ContactContext';
+import {Conversation} from './contexts/ConversationContext';
 
 function App() {
   const [id, setId] = useLS('id');
@@ -15,9 +16,7 @@ function App() {
 
   return (
     <div className="App">
-      <ContactProvider>
         {id ? dashboardComponent : <Login setId={setId}/>}
-      </ContactProvider>
     </div>
   );
 }

@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {Modal, Form, Button} from 'react-bootstrap';
 import {useContacts} from '../contexts/ContactContext';
+import {useConversations} from '../contexts/ConversationContext';
 
 const ConversationModal = ({closeModal}) => {
     const [selectedContacts, setSelectedContacts] = useState([]);
     const {contacts} = useContacts();
+    const {createConversation} = useConversations();
 
     const handleSelection = id => {
         setSelectedContacts(prevContacts => {
@@ -17,7 +19,7 @@ const ConversationModal = ({closeModal}) => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        // createConversation()
+        createConversation(selectedContacts);
         closeModal();
     }
 
