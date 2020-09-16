@@ -1,4 +1,4 @@
-import React, {createContext, useContext} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import useLS from '../hooks/useLS';
 import {useContacts} from './ContactContext';
 
@@ -10,24 +10,28 @@ export const useConversations = () => {
 
 export const ConversationProvider = (props) => {
     const [conversations, setConversations] = useLS('conversations', []);
+    const [selectedConv, setSelectedConv] = useState(0);
     const {contacts} = useContacts();
 
     const createConversation = recipients => {
         setConversations(prevConv => [...prevConv, {recipients, msgs: []}])
     }
 
-    const formatConversations = conversations.map(conv => { 
+    const formatConversations = conversations.map((conv, idx) => { 
         const recipients = conv.recipients.map(recipient => {
             const contact = contacts.find(contact => contact.id === recipient);
             const name = (contact && contact.name) || recipient;
             return {id: recipient, name};
         });
-        return {...conv, recipients}
+        const selected = idx === selectedConv;
+        return {...conv, recipients, selected}
     });
 
     const value = {
         conversations: formatConversations, 
-        createConversation
+        createConversation,
+        selectedConversation: formatConversations[selectedConv],
+        selectConversation: setSelectedConv
     }
 
     return (
