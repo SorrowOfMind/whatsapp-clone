@@ -17,6 +17,23 @@ export const ConversationProvider = (props) => {
         setConversations(prevConv => [...prevConv, {recipients, msgs: []}])
     }
 
+    const receiveMessage = ({recipients, text, sender}) => {
+        setConversations(prevConv => {
+            let change = false;
+            const newMessage = {sender, text};
+            const newConversations = prevConv.map();
+            if (change) {
+
+            } else {
+                return [...prevConv, {recipients, messages: [newMessage]}]
+            }
+        })
+    };
+
+    const sendMessage = (recipients, text) => {
+        receiveMessage({recipients, text, sender: props.id})
+    }
+
     const formatConversations = conversations.map((conv, idx) => { 
         const recipients = conv.recipients.map(recipient => {
             const contact = contacts.find(contact => contact.id === recipient);
@@ -30,6 +47,7 @@ export const ConversationProvider = (props) => {
     const value = {
         conversations: formatConversations, 
         createConversation,
+        sendMessage,
         selectedConversation: formatConversations[selectedConv],
         selectConversation: setSelectedConv
     }
