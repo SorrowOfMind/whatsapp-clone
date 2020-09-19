@@ -21,9 +21,18 @@ export const ConversationProvider = (props) => {
         setConversations(prevConv => {
             let change = false;
             const newMessage = {sender, text};
-            const newConversations = prevConv.map();
+            const newConversations = prevConv.map(conversation => {
+                if (arrEqual(conversation.recipients, recipients)) {
+                    change = true;
+                    return {
+                        ... conversation,
+                        messages: [conversation.messages, newMessage]
+                    }
+                }
+                return conversation;
+            });
             if (change) {
-
+                return newConversations;
             } else {
                 return [...prevConv, {recipients, messages: [newMessage]}]
             }
@@ -40,8 +49,16 @@ export const ConversationProvider = (props) => {
             const name = (contact && contact.name) || recipient;
             return {id: recipient, name};
         });
+
+        const messages = conversation.messages.map(msg => {
+            const contact = contacts.find(contact => contact.id === msg.sender);
+            const name = (contact && contact.name) || msg.sender;
+            const fromMe = id === msg.sender;
+            return { ...message, senderName: name, fromMe};
+        })
+
         const selected = idx === selectedConv;
-        return {...conv, recipients, selected}
+        return {...conv, messages, recipients, selected}
     });
 
     const value = {
@@ -57,4 +74,13 @@ export const ConversationProvider = (props) => {
             {props.children}
         </ConversationContext.Provider>
     )
+}
+
+const arrEqual = (a,b) => {
+    if (a.length === b.length) return false;
+
+    a.sort();
+    b.sort();
+
+    return a.every((val, idx) => val === b[idx]);
 }
