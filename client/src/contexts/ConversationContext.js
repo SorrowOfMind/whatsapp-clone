@@ -14,7 +14,7 @@ export const ConversationProvider = (props) => {
     const {contacts} = useContacts();
 
     const createConversation = recipients => {
-        setConversations(prevConv => [...prevConv, {recipients, msgs: []}])
+        setConversations(prevConv => [...prevConv, {recipients, messages: []}])
     }
 
     const receiveMessage = ({recipients, text, sender}) => {
@@ -25,8 +25,8 @@ export const ConversationProvider = (props) => {
                 if (arrEqual(conversation.recipients, recipients)) {
                     change = true;
                     return {
-                        ... conversation,
-                        messages: [conversation.messages, newMessage]
+                        ...conversation,
+                        messages: [...conversation.messages, newMessage]
                     }
                 }
                 return conversation;
@@ -50,13 +50,13 @@ export const ConversationProvider = (props) => {
             return {id: recipient, name};
         });
 
-        const messages = conversation.messages.map(msg => {
+        const messages = conv.messages.map(msg => {
             const contact = contacts.find(contact => contact.id === msg.sender);
             const name = (contact && contact.name) || msg.sender;
-            const fromMe = id === msg.sender;
-            return { ...message, senderName: name, fromMe};
+            const fromMe = props.id === msg.sender;
+            return { ...msg, senderName: name, fromMe};
         })
-
+       
         const selected = idx === selectedConv;
         return {...conv, messages, recipients, selected}
     });
@@ -77,7 +77,7 @@ export const ConversationProvider = (props) => {
 }
 
 const arrEqual = (a,b) => {
-    if (a.length === b.length) return false;
+    if (a.length !== b.length) return false;
 
     a.sort();
     b.sort();

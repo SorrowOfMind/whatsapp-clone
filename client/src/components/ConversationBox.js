@@ -19,7 +19,18 @@ const ConversationBox = () => {
 
     return (
         <div className="d-flex flex-column flex-grow-1">
-            <div className="flex-grow-1 overflow-auto"></div>
+            <div className="flex-grow-1 overflow-auto">
+                <div className="h-100 d-flex flex-column align-items-start justify-content-end px-3">
+                    {selectedConversation.messages.map((msg, idx) => {
+                        return (
+                            <div key={idx} className={`my-1 d-flex flex-column ${msg.fromMe ? 'align-self-end' : ''}`}>
+                                <div className={`rounded px-2 py-1 ${msg.fromMe ? 'bg-success text-white' : 'border'}`}>{msg.text}</div>
+                                <div className={`text-muted small ${msg.fromMe ? 'text-right' : ''}`}>{msg.fromMe ? 'You' : msg.name}</div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="m-2">
                     <InputGroup>
