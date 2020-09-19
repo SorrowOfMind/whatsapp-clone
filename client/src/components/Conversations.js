@@ -8,7 +8,7 @@ const Conversations = () => {
         <ListGroup className="rounded-0">
             {conversations && conversations.map((conversations, idx) => <ListGroup.Item 
             key={idx} 
-            action 
+            action
             active={conversations.selected}
             onClick={() => selectConversation(idx)}
             >{conversations.recipients.map(r => r.name).join(', ')}</ListGroup.Item>)}

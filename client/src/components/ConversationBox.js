@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import {Form, InputGroup, Button} from 'react-bootstrap';
 import {useConversations} from '../contexts/ConversationContext';
 
@@ -6,13 +6,9 @@ const ConversationBox = () => {
     const [text, setText] = useState('');
     const {sendMessage, selectedConversation} = useConversations();
 
-    const lastMsgRef = useRef();
-
-    useEffect(() => {
-        if (lastMsgRef.current) {
-            lastMsgRef.current.scrollIntoView({smooth: true});
-        }
-    })
+    const setRef = useCallback(node => {
+        if (node) node.scrollIntoView({smooth: true});
+    }, []); 
 
     const handleChange = e => {
         setText(e.target.value);
@@ -32,7 +28,7 @@ const ConversationBox = () => {
                     {selectedConversation.messages.map((msg, idx) => {
                         const lastMsg = selectedConversation.messages.length - 1 === idx;
                         return (
-                            <div key={idx} ref={lastMsg ? lastMsgRef : null} className={`my-1 d-flex flex-column ${msg.fromMe ? 'align-self-end' : ''}`}>
+                            <div key={idx} ref={lastMsg ? setRef : null} className={`my-1 d-flex flex-column ${msg.fromMe ? 'align-self-end' : ''}`}>
                                 <div className={`rounded px-2 py-1 ${msg.fromMe ? 'bg-success text-white' : 'border'}`}>{msg.text}</div>
                                 <div className={`text-muted small ${msg.fromMe ? 'text-right' : ''}`}>{msg.fromMe ? 'You' : msg.name}</div>
                             </div>
