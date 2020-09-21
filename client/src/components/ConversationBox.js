@@ -28,7 +28,7 @@ const ConversationBox = () => {
                     {selectedConversation.messages.map((msg, idx) => {
                         const lastMsg = selectedConversation.messages.length - 1 === idx;
                         return (
-                            <div key={idx} ref={lastMsg ? setRef : null} className={`my-1 d-flex flex-column ${msg.fromMe ? 'align-self-end' : ''}`}>
+                            <div key={idx} ref={lastMsg ? setRef : null} className={`my-1 d-flex flex-column ${msg.fromMe ? 'align-self-end align-items-end' : 'align-items-start'}`}>
                                 <div className={`rounded px-2 py-1 ${msg.fromMe ? 'bg-success text-white' : 'border'}`}>{msg.text}</div>
                                 <div className={`text-muted small ${msg.fromMe ? 'text-right' : ''}`}>{msg.fromMe ? 'You' : msg.name}</div>
                             </div>
