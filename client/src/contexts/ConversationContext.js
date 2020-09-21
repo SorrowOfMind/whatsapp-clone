@@ -1,6 +1,7 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useState, useEffect, useCallback} from 'react';
 import useLS from '../hooks/useLS';
 import {useContacts} from './ContactContext';
+import {useSocket} from './SocketContext';
 
 const ConversationContext = createContext();
 
@@ -12,12 +13,21 @@ export const ConversationProvider = (props) => {
     const [conversations, setConversations] = useLS('conversations', []);
     const [selectedConv, setSelectedConv] = useState(0);
     const {contacts} = useContacts();
+    const socket = useSocket();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        socket.on('receive-msg', receiveMessage);
+
+        return () => socket.off('receive-msg');
+    }, [socket, receiveMessage]);
 
     const createConversation = recipients => {
         setConversations(prevConv => [...prevConv, {recipients, messages: []}])
     }
 
-    const receiveMessage = ({recipients, text, sender}) => {
+    const receiveMessage = useCallback(({recipients, text, sender}) => {
         setConversations(prevConv => {
             let change = false;
             const newMessage = {sender, text};
@@ -37,9 +47,10 @@ export const ConversationProvider = (props) => {
                 return [...prevConv, {recipients, messages: [newMessage]}]
             }
         })
-    };
+    }, [setConversations]);
 
     const sendMessage = (recipients, text) => {
+        socket.emit('send-msg', {recipients, text})
         receiveMessage({recipients, text, sender: props.id})
     }
 

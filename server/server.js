@@ -6,7 +6,7 @@ io.on("connection", socket => {
 
     socket.on('send-msg', ({recipients, text}) => {
         recipients.forEach(recipient => {
-            const newRecipient = recipients.filter(r => r !== recipient);
+            const newRecipients = recipients.filter(r => r !== recipient);
             newRecipients.push(id);
             socket.broadcast.to(recipient).emit('recive-msg', {recipients: newRecipients, sender: id, text})
         })
